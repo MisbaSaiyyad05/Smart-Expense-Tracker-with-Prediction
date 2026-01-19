@@ -20,5 +20,5 @@ The system provides category-wise expense analysis and uses machine learning to 
   Simple and user-friendly interface
 
 
-![Dashboard](images/dashboard.png)
+![Dashboard](image.png)
 
