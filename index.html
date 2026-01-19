@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Expense Tracker with Prediction</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="title">
+                    <span class="icon">💰</span>
+                    Smart Expense Tracker
+                </h1>
+                <p class="subtitle">Track, Analyze & Predict Your Expenses</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Add Expense Section -->
+            <section class="card expense-form-section">
+                <h2 class="card-title">Add New Expense</h2>
+                <form id="expenseForm" class="expense-form">
+                    <div class="form-group">
+                        <label for="amount">Amount ($)</label>
+                        <input type="number" id="amount" step="0.01" min="0" required placeholder="Enter amount">
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" required>
+                            <option value="">Select Category</option>
+                            <option value="Food">Food</option>
+                            <option value="Transport">Transport</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Bills">Bills</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Education">Education</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <input type="text" id="description" placeholder="Optional description">
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <span>Add Expense</span>
+                        <span class="btn-icon">+</span>
+                    </button>
+                </form>
+            </section>
+
+            <!-- Statistics Cards -->
+            <section class="stats-section">
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-content">
+                        <h3 class="stat-label">Total Expenses</h3>
+                        <p class="stat-value" id="totalExpenses">$0.00</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-content">
+                        <h3 class="stat-label">This Month</h3>
+                        <p class="stat-value" id="monthlyExpenses">$0.00</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🔮</div>
+                    <div class="stat-content">
+                        <h3 class="stat-label">Next Month Prediction</h3>
+                        <p class="stat-value" id="prediction">$0.00</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section class="charts-section">
+                <!-- Category Chart -->
+                <div class="card chart-card">
+                    <h2 class="card-title">Category-wise Expenses</h2>
+                    <canvas id="categoryChart"></canvas>
+                </div>
+
+                <!-- Monthly Trend Chart -->
+                <div class="card chart-card">
+                    <h2 class="card-title">Monthly Trend</h2>
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Expense List Section -->
+            <section class="card expense-list-section">
+                <div class="section-header">
+                    <h2 class="card-title">Recent Expenses</h2>
+                    <div class="filter-group">
+                        <select id="filterCategory" class="filter-select">
+                            <option value="all">All Categories</option>
+                            <option value="Food">Food</option>
+                            <option value="Transport">Transport</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Bills">Bills</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Healthcare">Healthcare</option>
+                            <option value="Education">Education</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <select id="filterMonth" class="filter-select">
+                            <option value="all">All Months</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="expenseList" class="expense-list">
+                    <div class="empty-state">
+                        <div class="empty-icon">📝</div>
+                        <p>No expenses yet. Add your first expense above!</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Edit Expense Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Expense</h2>
+            <form id="editForm">
+                <input type="hidden" id="editId">
+                <div class="form-group">
+                    <label for="editAmount">Amount ($)</label>
+                    <input type="number" id="editAmount" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="editCategory">Category</label>
+                    <select id="editCategory" required>
+                        <option value="Food">Food</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Shopping">Shopping</option>
+                        <option value="Bills">Bills</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Education">Education</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editDate">Date</label>
+                    <input type="date" id="editDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="editDescription">Description</label>
+                    <input type="text" id="editDescription">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelEdit">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
